@@ -1,0 +1,30 @@
+/*
+ * ADC_interface.h
+ *
+ *  Created on: Sep 3, 2022
+ *      Author: hp
+ */
+
+#ifndef MCAL_ADC_INTERFACE_H_
+#define MCAL_ADC_INTERFACE_H_
+
+#include "ADC_private.h"
+
+void ADC_void_INIT(ADC_CHANNEL_ID* ADC_CHANNELS,u8 NUMBER_OF_CHANNELS);
+
+void ADC_ENABLE_INT(void(* EVENT_FUNC)(void));
+
+void ADC_DISABLE_INT();
+
+u32 ADC_u32_ANALOG_REGULAR_SingleRead_BLOCKING(ADC_CHANNEL_ID CHANNEL);
+
+u32 ADC_u32_ANALOG_REGULAR_SingleRead_NON_BLOCKING(ADC_CHANNEL_ID CHANNEL,u32* result_return_var);
+
+
+void ADC_ENABLE_EXTRIGGER(ADC_TRIGGER_TYPE_ID TRIGGER_TYPE);
+
+
+
+
+
+#endif /* MCAL_ADC_INTERFACE_H_ */

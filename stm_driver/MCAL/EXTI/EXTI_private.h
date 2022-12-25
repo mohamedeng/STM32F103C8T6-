@@ -1,0 +1,51 @@
+/*
+ * EXTI_private.h
+ *
+ *  Created on: Aug 27, 2022
+ *      Author: hp
+ */
+
+#ifndef MCAL_EXTI_EXTI_PRIVATE_H_
+#define MCAL_EXTI_EXTI_PRIVATE_H_
+
+#include "LIB/STM_CONFIG.h"
+#include "LIB/BIT_MATH.h"
+#include "LIB/STD_TYPES.h"
+
+typedef enum {
+
+	EXTI0,EXTI1,EXTI2,EXTI3,EXTI4,
+	EXTI5,EXTI6,EXTI7,EXTI8,EXTI9,
+
+	EXTI10,EXTI11,EXTI12,EXTI13,EXTI14,
+	EXTI15,EXTI16,EXTI17,EXTI18,EXTI21=21,
+
+	EXTI22
+
+
+
+}EXTI_LineNumber_ID;
+
+typedef enum {EXTI_Rising,EXTI_Falling,EXTI_AnyChange}EXTI_TRIGGER_TYPE_ID;
+
+
+typedef enum {EXTI_PA,EXTI_PB,EXTI_PC,EXTI_PD,EXTI_PE,EXTI_PH=7} EXTI_PIN_TYPE_ID;
+
+typedef struct
+{
+
+	u32 EXTI_IMR;
+	u32 EXTI_EMR;
+	u32 EXTI_RTSR;
+	u32 EXTI_FTSR;
+	u32 EXTI_SWIER;
+	u32 EXTI_PR;
+
+
+}EXTI_ID;
+
+
+#define EXTI_REGS ( (EXTI_ID*)(0x40013C00))
+
+
+#endif /* MCAL_EXTI_EXTI_PRIVATE_H_ */

@@ -1,0 +1,59 @@
+/*
+ * SPI_private.h
+ *
+ *  Created on: Oct 13, 2022
+ *      Author: hp
+ */
+
+#ifndef MCAL_SPI_SPI_PRIVATE_H_
+#define MCAL_SPI_SPI_PRIVATE_H_
+
+#include "LIB/STM_CONFIG.h"
+#include "LIB/BIT_MATH.h"
+#include "LIB/STD_TYPES.h"
+
+typedef enum {SPI_MSBF,SPI_LSBF}SPI_Frame_format_ID;
+
+typedef enum {SPI_FRAME_SIZE_8,SPI_FRAME_SIZE_16}SPI_FRAME_SIZE_ID;
+
+typedef enum {SPI_MODE0,SPI_MODE1,SPI_MODE2,SPI_MODE3}SPI_MODE_ID;
+
+typedef enum {SPI_SLAVE,SPI_MASTER}SPI_MASTER_SLAVE_MODE_ID;
+
+typedef enum {
+		SPI_BAUD_RATE_FACTOR_2,SPI_BAUD_RATE_FACTOR_4,
+		SPI_BAUD_RATE_FACTOR_8,SPI_BAUD_RATE_FACTOR_16,
+		SPI_BAUD_RATE_FACTOR_32,SPI_BAUD_RATE_FACTOR_64,
+		SPI_BAUD_RATE_FACTOR_128,
+		SPI_BAUD_RATE_FACTOR_256,
+
+}SPI_BAUD_RATE_FACTOR_ID;
+
+typedef struct {
+
+	u32 SPI_CR1;
+	u32 SPI_CR2;
+	u32 SPI_SR;
+	u32 SPI_DR;
+	u32 SPI_CRCPR;
+	u32 SPI_RXCRCR;
+	u32 SPI_TXCRCR;
+	u32 SPI_I2SPR;
+
+}SPI_ID ;
+
+
+//#define SPI1_REGS ((volatile(SPI_ID*)0x40013000))
+//#define SPI2_REGS ((volatile(SPI_ID*)0x40003800))
+//#define SPI3_REGS ((volatile(SPI_ID*)0x40003C00))
+//#define SPI4_REGS ((volatile(SPI_ID*)0x40013400))
+
+typedef enum {
+	SPI1 = 0x40013000,
+	SPI2 = 0x40003800,
+	SPI3 = 0x40003C00,
+	SPI4 = 0x40013400
+}SPI_PER;
+
+
+#endif /* MCAL_SPI_SPI_PRIVATE_H_ */

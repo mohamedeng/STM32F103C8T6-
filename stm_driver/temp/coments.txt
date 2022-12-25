@@ -1,0 +1,6 @@
+/**
+ * [SET_BIT: set one bit in register]
+ * @param  REG               [register]
+ * @param  BIT               [the position of the bit]
+ * @return     [no return]
+ */
