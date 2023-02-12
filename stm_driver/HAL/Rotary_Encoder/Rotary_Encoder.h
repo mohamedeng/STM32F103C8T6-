@@ -1,0 +1,60 @@
+/*
+ * Rotary_Encoder.h
+ *
+ *  Created on: Jan 28, 2023
+ *      Author: hp
+ */
+
+#ifndef HAL_ROTARY_ENCODER_ROTARY_ENCODER_H_
+#define HAL_ROTARY_ENCODER_ROTARY_ENCODER_H_
+
+#include "LIB/STM_CONFIG.h"
+#include "LIB/STD_TYPES.h"
+#include "LIB/BIT_MATH.h"
+#include "LIB/DELAY.h"
+
+#include "MCAL/RCC/RCC_interface.h"
+#include "MCAL/GPIO/GPIO_interface.h"
+#include "MCAL/NVIC/NVIC_interface.h"
+#include "MCAL/EXTI/EXTI_interface.h"
+
+#define Number_OF_ENCODERS 1
+
+
+
+typedef struct {
+
+	u8 ROTARY_ENCODER_Ticket;
+	EXTI_LineNumber_ID EXTI_LineNumber_A;EXTI_PIN_TYPE_ID EXTI_PIN_TYPE_A;GPIO_ID* ROTARY_ENCODER_GPIO_A;
+	GPIO_ID* ROTARY_ENCODER_GPIO_B; u8 ROTARY_ENCODER_PIN_B;
+	GPIO_ID* ROTARY_ENCODER_PUSHBUTTON_GPIO;u8 ROTARY_ENCODER_PUSHBUTTON_PIN;
+	u32 increment_Value;
+	u32 TICKS_RATIO_TO_FullCycle;
+
+
+
+}ROTARY_ENCODER_ID;
+
+
+
+
+void ROTARY_ENCODER_INIT(
+		ROTARY_ENCODER_ID* ROTARY_ENCODER,
+		EXTI_LineNumber_ID EXTI_LineNumber_A,EXTI_PIN_TYPE_ID EXTI_PIN_TYPE_A,
+		GPIO_ID* ROTARY_ENCODER_GPIO_B,u8 ROTARY_ENCODER_PIN_B,
+		GPIO_ID* ROTARY_ENCODER_PUSHBUTTON_GPIO,u8 ROTARY_ENCODER_PUSHBUTTON_PIN,
+		u32 TICKS_RATIO_TO_FullCycle
+		);
+/* the start position is 0
+ * if the signal is inverted increment if the same subtract
+*/
+u16 ROTARY_ENCODER_u16_GET_ANGLE(ROTARY_ENCODER_ID* ROTARY_ENCODER);
+
+u8 ROTARY_ENCODER_u8_GET_INPUT(ROTARY_ENCODER_ID* ROTARY_ENCODER);
+
+void ROTARY_ENCODER_ISR(void);
+
+
+
+
+#endif /* HAL_ROTARY_ENCODER_ROTARY_ENCODER_H_ */

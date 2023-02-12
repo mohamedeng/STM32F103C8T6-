@@ -60,9 +60,6 @@ void SPI_INIT(SPI_PER SPI_PER_NUMER,
 
 	SET_BIT(SPI->SPI_CR1,SPI_ENABLE_BIT);
 
-
-
-
 }
 
 void SPI_void_SETMODE(SPI_PER SPI_PER_NUMER,SPI_MODE_ID SPI_MODE)
@@ -106,9 +103,28 @@ void SPI_void_SETMODE(SPI_PER SPI_PER_NUMER,SPI_MODE_ID SPI_MODE)
 
 void SPI_void_SETBAUDRATE(SPI_PER SPI_PER_NUMER,SPI_BAUD_RATE_FACTOR_ID SPI_FACTOR)
 {
-	SPI_ID* SPI = (SPI_ID*)(SPI_PER_NUMER);
-	SPI->SPI_CR1 |= (SPI_FACTOR<<3);
 
+	SPI_ID* SPI = (SPI_ID*)(SPI_PER_NUMER);
+	SPI->SPI_DR = 0xFF;
+	volatile u8 temp = SPI->SPI_DR;
+	// wait for rx = 1 ,tx = 1 ,busy = 0 flags
+	while(GET_BIT(SPI->SPI_SR,1) == 0);
+	while(GET_BIT(SPI->SPI_SR,7) == 1);
+	// diable spi
+	//CLR_BIT(SPI->SPI_CR1,SPI_ENABLE_BIT);
+	// change baudrate
+	SPI->SPI_CR1 &= BAUD_RATE_BITMASK;
+	SPI->SPI_CR1 |= (SPI_FACTOR<<BR);
+	CLR_BIT(SPI->SPI_CR1,10);
+	//SET_BIT(SPI->SPI_CR1,SPI_ENABLE_BIT);
+	temp = SPI->SPI_DR;
+}
+
+
+u8 SPI_void_GETBAUDRATE(SPI_PER SPI_PER_NUMER)
+{
+	SPI_ID* SPI = (SPI_ID*)(SPI_PER_NUMER);
+	return (((SPI->SPI_CR1) & (~BAUD_RATE_BITMASK))>>3);
 
 }
 
@@ -122,7 +138,7 @@ void SPI_void_TRANSMIT_BYTE(SPI_PER SPI_PER_NUMER,u16 DATA)
 	while(GET_BIT(SPI->SPI_SR,1) == 0);
 	while(GET_BIT(SPI->SPI_SR,7) == 1);
 	volatile u8 temp = SPI->SPI_DR;
-	temp = SPI->SPI_SR;
+//	temp = SPI->SPI_SR;
 
 
 }

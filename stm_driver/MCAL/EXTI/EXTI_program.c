@@ -7,18 +7,22 @@
 
 #include "EXTI_interface.h"
 #include "EXTI_private.h"
-#include "MCAL/RCC/RCC_interface.h"
-#include "MCAL/SYSCFG/SYSCFG_private.h"
-#include "MCAL/GPIO/GPIO_interface.h"
 
+
+#include "MCAL/RCC/RCC_interface.h"
+#include "MCAL/SYSCFG/SYSCFG_interface.h"
+#include "MCAL/GPIO/GPIO_interface.h"
+#include "MCAL/NVIC/NVIC_interface.h"
 static void (* EVENT_HANDLER[23])(void)= {0};
 
 
 void EXTI_void_ENABLE_INT(EXTI_LineNumber_ID EXTI_LineNumber ,EXTI_PIN_TYPE_ID EXTI_PIN_TYPE,EXTI_TRIGGER_TYPE_ID TRIGGER_TYPE,void (*EVENT_FUNC)(void))
 {
-	RCC_void_ENABLE_PERCLK(RCC_SYSCFG);
 
-	SYSCFG_REGS->SYSCFG_EXTICR[EXTI_LineNumber/4] = (EXTI_PIN_TYPE<<(EXTI_LineNumber%4)*4);
+	SYSCFG_External_INT_CONFIG(EXTI_LineNumber,EXTI_PIN_TYPE); // select the source input for the EXTI interrupt
+
+
+
 	switch (TRIGGER_TYPE)
 	{
 
@@ -44,6 +48,23 @@ void EXTI_void_ENABLE_INT(EXTI_LineNumber_ID EXTI_LineNumber ,EXTI_PIN_TYPE_ID E
 	EVENT_HANDLER[EXTI_LineNumber] = EVENT_FUNC;
 
 
+	if(EXTI_LineNumber < 5)
+	{
+
+		NVIC_EnableINT(EXTI_LineNumber+6);
+
+	}
+	else if(EXTI_LineNumber < 10)
+	{
+		NVIC_EnableINT(23);
+	}
+	else
+	{
+		NVIC_EnableINT(40);
+	}
+
+
+
 }
 void EXTI_void_DISABLE_INT(EXTI_LineNumber_ID EXTI_LineNumber)
 {
@@ -51,7 +72,38 @@ void EXTI_void_DISABLE_INT(EXTI_LineNumber_ID EXTI_LineNumber)
 
 
 }
-void EXTI_void_TRIGGER_TYPE(EXTI_LineNumber_ID EXTI_LineNumber ,EXTI_TRIGGER_TYPE_ID TRIGGER_TYPE);
+void EXTI_void_TRIGGER_TYPE(EXTI_LineNumber_ID EXTI_LineNumber ,EXTI_TRIGGER_TYPE_ID TRIGGER_TYPE)
+{
+
+	switch (TRIGGER_TYPE)
+	{
+
+	case EXTI_Rising:
+		SET_BIT(EXTI_REGS->EXTI_RTSR,EXTI_LineNumber);
+
+		break;
+
+	case EXTI_Falling:
+		SET_BIT(EXTI_REGS->EXTI_FTSR,EXTI_LineNumber);
+		break;
+	case EXTI_AnyChange:
+		SET_BIT(EXTI_REGS->EXTI_FTSR,EXTI_LineNumber);
+		SET_BIT(EXTI_REGS->EXTI_RTSR,EXTI_LineNumber);
+
+		break;
+
+	}
+
+
+}
+
+
+u8 EXTI_u8_GetPending_LINE_INT(EXTI_LineNumber_ID EXTI_LineNumber)
+{
+	return GET_BIT(EXTI_REGS->EXTI_PR,EXTI_LineNumber);
+
+}
+
 
 
 void EXTI0_IRQHandler()
@@ -140,8 +192,6 @@ void EXTI9_5_IRQHandler()
 
 
 }
-
-
 
 
 void EXTI15_10_IRQHandler()

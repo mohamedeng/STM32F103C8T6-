@@ -79,11 +79,10 @@ void NVIC_SetPriority(INT_Type INT, u32 priority)
 
 }
 
-u32 NVIC_GetPriority(INT_Type INT)
+u32 NVIC_Get_Group_Priority(INT_Type INT)
 {
 
 
-return 0;
 
 
 

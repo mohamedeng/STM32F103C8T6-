@@ -12,6 +12,9 @@
 #include "LIB/BIT_MATH.h"
 #include "LIB/STD_TYPES.h"
 
+#define BAUD_RATE_BITMASK    0xFFC7
+
+
 typedef enum {SPI_MSBF,SPI_LSBF}SPI_Frame_format_ID;
 
 typedef enum {SPI_FRAME_SIZE_8,SPI_FRAME_SIZE_16}SPI_FRAME_SIZE_ID;

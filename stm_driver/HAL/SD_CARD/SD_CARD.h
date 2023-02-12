@@ -12,9 +12,17 @@
 #include "LIB/STD_TYPES.h"
 #include "LIB/BIT_MATH.h"
 #include "LIB/DELAY.h"
-#include "SD_CARD_INFO.h"
+
+
 #include "MCAL/SPI/SPI_interface.h"
 #include "MCAL/GPIO/GPIO_interface.h"
+#include "MCAL/RCC/RCC_interface.h"
+
+#include "Data_Structures/Stack/Stack.h"
+
+#include "SD_CARD_INFO.h"
+
+
 
 #define SD_CARD_MOSI 0
 #define SD_CARD_MISO 1
@@ -32,8 +40,8 @@ typedef struct{
 	GPIO_ID* SD_CARD_MISO_PORT;u8 SD_CARD_MISO_PIN;
 	GPIO_ID* SD_CARD_SCK_PORT;u8 SD_CARD_SCK_PIN;
 	GPIO_ID* SD_CARD_CS_PORT;u8 SD_CARD_CS_PIN;
-	u8 HW_ERROR[SD_CARD_ERROR_LOG_ARRAY_SIZE];
-	u8 HW_ERROR_COUNT;
+	Stack_Struct HW_ErrorStack;
+	u8 HW_ErrorCount;
 	SD_CARD_VERSION_TYPE SD_CARD_VERSION;
 }SD_CARD_ID;
 
@@ -50,7 +58,8 @@ void SD_CARD_ENABLE_CS(SD_CARD_ID* SD_CARD);
 void SD_CARD_DISABLE_CS(SD_CARD_ID* SD_CARD);
 void SD_CARD_void_SPI_SEND(SD_CARD_ID* SD_CARD,u8 DATA);
 u8 SD_CARD_u8_SPI_RECEIVE(SD_CARD_ID* SD_CARD);
-u8 SD_CARD_u8_RES_WAIT(SD_CARD_ID* SD_CARD,u32 TIME_OUT);
+u8 SD_CARD_u8_RES_WAIT(SD_CARD_ID* SD_CARD,u32* value_Expected,u8 value_Expected_count,u32 TIME_OUT);
+void SD_CARD_void_WAIT(SD_CARD_ID* SD_CAR,u32 TIME_OUT);
 u8 SD_CARD_u8_READ_BLOCK(SD_CARD_ID* SD_CARD,u32 LBA,u8 BLOCK_ARRAY[512]);
 
 
